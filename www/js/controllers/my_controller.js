@@ -202,16 +202,18 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
     $scope.onChangeEvent = function() {
 
         // temp code until we get db
-        $scope.nuus_filtered = [];
+        // $scope.nuus_filtered = [];
+        // $scope.pitonuus_filtered = [];
 
-                    $scope.filterNuus();
-        return;
+        //             $scope.filterNuus();
+        // return;
         
         MyService.checkToken($scope.jwt).then(function (data) {
 
                 if(data.success) {
 
                     $scope.nuus_filtered = [];
+                    $scope.pitonuus_filtered = [];
 
                     $scope.filterNuus();
                 } else {
@@ -230,7 +232,6 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
 
     $scope.onChangeMotu = function() {
 
-        // code
         $scope.setItumalos($scope.selected_motu.id);
                 $scope.selected_itumalo = $scope.itumalos_filtered[0];
 
@@ -263,11 +264,6 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
 
     $scope.filterNuus = function() {
 
-        if($scope.isSearchable()) {
-
-            $scope.nuus_filtered = $scope.filterArray($scope.nuus, $scope.search_text);
-        }
-
         if($scope.selected_motu.id) {
 
             if($scope.nuus_filtered.length == 0) {
@@ -287,6 +283,17 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
             } else {
 
                 $scope.nuus_filtered = $scope.filterNuusByItumaloId($scope.selected_itumalo.id, $scope.nuus_filtered);
+            }
+        }
+
+        if($scope.isSearchable()) {
+
+            if($scope.nuus_filtered.length == 0) {
+
+                $scope.nuus_filtered = $scope.filterArray($scope.nuus, $scope.search_text);
+            } else {
+
+                $scope.nuus_filtered = $scope.filterArray($scope.nuus_filtered, $scope.search_text);
             }
         }
     };
@@ -408,6 +415,17 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
 
                 temp_nuus.push(nuu);
             }
+            
+            if(nuu.pitonuus) {
+
+                for(var j = 0; j < nuu.pitonuus.length; j++) {
+
+                    if($scope.searchMatch(nuu.pitonuus[j], search_term)) {
+
+                        $scope.pitonuus_filtered.push(nuu.pitonuus[j]);
+                    }
+                }
+            }
         }
         return temp_nuus;
     };
@@ -416,18 +434,6 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
     $scope.myFilter = function(nuu, search_term){
 
         var match = $scope.searchMatch(nuu, search_term);
-
-        if(!match && nuu.pitonuus){
-
-            for(var i = 0; i < nuu.pitonuus.length; i++) {
-
-                match = $scope.searchMatch(nuu.pitonuus[i], search_term);
-                if(match) {
-
-                    break;
-                }
-            }
-        }
 
         return match;
     };
@@ -450,7 +456,7 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
                 }
             }
         } else {
-
+            
             found = $scope.filterContent(nuu.content, search_term);
         }
 
@@ -460,6 +466,7 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
     $scope.filterContent = function(contents, term) {
 
         var found = false;
+        term = term.toLowerCase();
         for(var i = 0; i < contents.length; i++) {
 
             var content = contents[i];
@@ -468,7 +475,7 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
                 if (content.hasOwnProperty(k)) {
 
                     var lines = content[k];
-                    for(var j = 0; j < lines.length; j++) {
+                    for(var j = 0; j < 1; j++) {
 
                         var str = lines[j].toLowerCase();
                         if($scope.exact_match) {
@@ -477,7 +484,7 @@ myApp.controller('MyController', function($scope, $filter, MyService, $rootScope
                         } else {
 
                             if (str.indexOf(term) > -1) {
-
+            
                                 found = true;
                             }
                         }
