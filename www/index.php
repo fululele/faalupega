@@ -31,7 +31,6 @@
 
 <div ng-app="MyApp" ng-controller="MyController" data-ng-init="load()">
 
-<section>
     <div class="container">
         
     <div class="col-sm-12" ng-show="isLandingMode()">
@@ -47,11 +46,8 @@
     </div>
 
     <div class="col-sm-12" ng-show="!selected_nuu && isActiveMode()">
-        <h1 class="title">
-                Tusi Fa'alupega
-            </h1>
+        <br/>
         <div>
-            <br/>
             <div class="columns">
                 <div class="column">
                     <input ng-model="search_text" type="text" placeholder="Search" ng-change="onChangeEvent()">
@@ -119,6 +115,9 @@
             </div>
         </div>
         <br/>
+    </div>
+    <div class="col-sm-12">
+        {{message}}
         <div ng-repeat="pitonuu in pitonuus_filtered">
             <span ng-click="onPitonuu(pitonuu);" style="cursor:pointer;font-size: large">{{pitonuu.name}}</span>
             <div ng-if="pitonuu.expanded" ng-repeat="content in pitonuu.content">
@@ -132,11 +131,15 @@
                 <br/>
             </div>
         </div>
+    </div>
+    <div class="col-sm-12" ng-if="selected_nuu">
+        <br/>
         <span ng-click="onBack();" style="cursor:pointer"><i class="fa fa-arrow-left"></i></span>
     </div>
+
 </div>
 </div>
-</section>
+
 
 
 
