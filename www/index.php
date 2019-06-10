@@ -118,7 +118,7 @@
     </div>
     <div class="col-sm-12">
         {{message}}
-        <div ng-repeat="pitonuu in pitonuus_filtered">
+        <div ng-repeat="pitonuu in pitonuus_filtered track by $index">
             <span ng-click="onPitonuu(pitonuu);" style="cursor:pointer;font-size: large">{{pitonuu.name}}</span>
             <div ng-if="pitonuu.expanded" ng-repeat="content in pitonuu.content">
                 <div ng-repeat="(key,lines) in content">
